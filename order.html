@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Form — 2nd Kuching Company</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#16233F; --navy-2:#22355C; --navy-3:#2C4270;
+    --red:#A1272B; --brass:#C09A5B; --cream:#F3EFE3; --offwhite:#FBF9F4;
+    --ink:#201D1A; --ink-soft:#524C42;
+    --line:rgba(32,29,26,0.12); --line-dark:rgba(255,255,255,0.14);
+    --radius:4px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ background:var(--offwhite); color:var(--ink); font-family:'Inter',sans-serif; line-height:1.55; -webkit-font-smoothing:antialiased; padding-bottom:90px; }
+  h1,h2,h3,h4{ font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:0.03em; font-weight:600; }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ max-width:1120px; margin:0 auto; padding:0 28px; }
+
+  header{ background:var(--navy); border-bottom:1px solid var(--line-dark); }
+  .navbar{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1250px; margin:0 auto; gap:14px; flex-wrap:wrap; }
+  .brand{ display:flex; align-items:center; gap:10px; color:var(--offwhite); }
+  .brand .crest{ width:60px; height:60px; border-radius:10px; overflow:hidden; flex-shrink:0; }
+  .brand .crest img{ width:100%; height:100%; object-fit:cover; }
+  .brand .name{ font-family:'Oswald'; font-size:15px; letter-spacing:0.06em; text-transform:uppercase; }
+  .brand .name small{ display:block; font-family:'JetBrains Mono'; font-size:9px; letter-spacing:0.12em; color:var(--brass); font-weight:400; margin-top:2px; }
+  .back{ font-family:'JetBrains Mono'; font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:rgba(251,249,244,0.78); border-bottom:1px solid transparent; padding:6px 0; }
+  .back:hover{ color:var(--offwhite); border-color:var(--brass); }
+
+  .page-head{ padding:56px 0 30px; }
+  .eyebrow{ font-family:'JetBrains Mono'; font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:var(--red); display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .eyebrow::before{ content:""; width:22px; height:2px; background:var(--red); }
+  .page-head h1{ font-size:clamp(30px,4vw,44px); margin-bottom:10px; }
+  .page-head p{ color:var(--ink-soft); font-size:15px; max-width:60ch; }
+
+  .block{ margin-bottom:44px; }
+  .block > h2{ font-size:20px; margin-bottom:6px; }
+  .block > .hint{ font-size:13px; color:var(--ink-soft); margin-bottom:20px; }
+
+  /* Item grid */
+  .items{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  .item{ border:1px solid var(--line); background:var(--offwhite); transition:border-color .15s, box-shadow .15s; display:flex; flex-direction:column; }
+  .item.active{ border-color:var(--red); box-shadow:0 0 0 1px var(--red); }
+  .thumb{ aspect-ratio:1; background:linear-gradient(150deg,#EFE6D2,#E3D5B4); position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; cursor:pointer; }
+  .thumb img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .thumb .ph{ font-family:'Oswald'; color:var(--brass); font-size:13px; letter-spacing:0.06em; text-transform:uppercase; padding:0 10px; text-align:center; }
+  .tick{ position:absolute; top:10px; right:10px; width:26px; height:26px; background:var(--red); color:var(--offwhite); display:none; align-items:center; justify-content:center; font-size:14px; border-radius:50%; }
+  .item.active .tick{ display:flex; }
+  .item-body{ padding:14px; display:flex; flex-direction:column; gap:10px; }
+  .item-body h4{ font-family:'Inter'; font-size:13.5px; font-weight:600; text-transform:none; letter-spacing:0; }
+  .qty{ display:flex; align-items:center; border:1px solid var(--line); width:max-content; }
+  .qty button{ width:34px; height:34px; border:none; background:var(--cream); font-size:18px; cursor:pointer; color:var(--navy); }
+  .qty button:hover{ background:var(--brass); }
+  .qty button:focus-visible{ outline:2px solid var(--brass); outline-offset:1px; }
+  .qty input{ width:48px; height:34px; border:none; border-left:1px solid var(--line); border-right:1px solid var(--line); text-align:center; font-family:'JetBrains Mono'; font-size:14px; background:var(--offwhite); -moz-appearance:textfield; }
+  .qty input::-webkit-outer-spin-button, .qty input::-webkit-inner-spin-button{ -webkit-appearance:none; }
+
+  /* Form fields */
+  .fields{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .fields .full{ grid-column:1/-1; }
+  label{ font-family:'JetBrains Mono'; font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); margin-bottom:5px; display:block; }
+  input[type=text], input[type=tel], select, textarea{
+    width:100%; padding:12px 14px; border:1px solid var(--line); background:var(--offwhite);
+    font-family:'Inter'; font-size:13.5px; border-radius:2px;
+  }
+  textarea{ min-height:120px; resize:vertical; }
+  input:focus, select:focus, textarea:focus{ outline:2px solid var(--brass); outline-offset:1px; border-color:var(--brass); }
+
+  .btn{ font-family:'JetBrains Mono'; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; padding:13px 24px; border-radius:var(--radius); border:1px solid transparent; cursor:pointer; display:inline-flex; align-items:center; gap:8px; transition:transform .15s, background .15s; }
+  .btn:hover{ transform:translateY(-2px); }
+  .btn-primary{ background:var(--red); color:var(--offwhite); }
+  .btn-primary:hover{ background:#B62F34; }
+  .btn-outline{ border-color:var(--navy); color:var(--navy); background:transparent; }
+  .btn-outline:hover{ background:var(--navy); color:var(--offwhite); }
+
+  /* Sticky bar */
+  .bar{ position:fixed; left:0; right:0; bottom:0; background:var(--navy); color:var(--offwhite); border-top:3px solid var(--red); z-index:50; }
+  .bar .in{ max-width:1120px; margin:0 auto; padding:14px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+  .bar .count{ font-family:'JetBrains Mono'; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; }
+  .bar .count b{ color:var(--brass); font-size:15px; }
+
+  /* Summary */
+  #summary{ display:none; background:var(--cream); border:1px solid var(--line); padding:30px; margin-bottom:44px; }
+  #summary h2{ font-size:20px; margin-bottom:6px; }
+  #summary p{ font-size:13.5px; color:var(--ink-soft); margin-bottom:16px; }
+  #summaryText{ min-height:240px; font-family:'JetBrains Mono'; font-size:12.5px; background:var(--offwhite); }
+  .sum-actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
+  .error{ color:var(--red); font-size:13px; margin-top:10px; display:none; }
+
+  @media (max-width:960px){ .items{ grid-template-columns:repeat(3,1fr); } }
+  @media (max-width:700px){
+    .items{ grid-template-columns:repeat(2,1fr); gap:14px; }
+    .fields{ grid-template-columns:1fr; }
+    .wrap{ padding:0 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="navbar">
+    <a href="index.html" class="brand">
+      <div class="crest"><img src="images/2ndKuchingLogo.png" alt="2nd Kuching Logo"></div>
+      <div class="name">2nd Kuching Coy<small>The Boys' Brigade</small></div>
+    </a>
+    <a href="index.html#shop" class="back">← Back to Shop</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="eyebrow">Company store</div>
+    <h1>Order Form</h1>
+    <p>Tap an item to add it, then set the quantity. Add anything else you need in the notes box at the bottom.</p>
+  </div>
+
+  <form id="orderForm" novalidate>
+    <div class="block">
+      <h2>1. Choose items</h2>
+      <div class="hint">You can pick as many items as you need.</div>
+      <div class="items" id="items"></div>
+    </div>
+
+    <div class="block">
+      <h2>2. Your details</h2>
+      <div class="hint">So the Orderly Room knows who to hand the items to.</div>
+      <div class="fields">
+        <div><label for="fname">Member's full name</label><input id="fname" type="text" placeholder="Full name" required></div>
+        <div><label for="fsection">Section / Squad</label>
+          <select id="fsection">
+            <option>Junior Section</option>
+            <option>Company Section</option>
+            <option>Band Section</option>
+            <option>Officer</option>
+          </select>
+        </div>
+        <div class="full"><label for="fcontact">Contact number (member or parent / guardian)</label><input id="fcontact" type="tel" placeholder="Phone number" required></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h2>3. Other requirements</h2>
+      <div class="hint">Sizes, special requests, anything not on the list.</div>
+      <textarea id="fnotes" placeholder="e.g. Uniform shirt size 14, boots size 8, need an extra nametag spelt 'LIEU'..."></textarea>
+      <div class="error" id="err"></div>
+    </div>
+
+    <div class="block" id="summary">
+      <h2>Order ready</h2>
+      <p>Check the details below, then send it to your squad officer or the Orderly Room.</p>
+      <textarea id="summaryText" readonly></textarea>
+      <div class="sum-actions">
+        <a id="waBtn" class="btn btn-primary" target="_blank" rel="noopener" style="display:none;">Send via WhatsApp →</a>
+        <button type="button" class="btn btn-outline" id="copyBtn">Copy order</button>
+        <button type="button" class="btn btn-outline" id="editBtn">Edit order</button>
+      </div>
+    </div>
+
+    <div class="bar">
+      <div class="in">
+        <div class="count"><b id="totalItems">0</b> items selected · <b id="totalQty">0</b> pieces</div>
+        <button type="submit" class="btn btn-primary">Review Order →</button>
+      </div>
+    </div>
+  </form>
+</main>
+
+<script>
+  // ====== EDIT HERE ======
+  // Put your WhatsApp number with country code and no + or spaces, e.g. '60121234567'.
+  // Leave empty to hide the WhatsApp button.
+  const WHATSAPP_NUMBER = '';
+
+  // Item list. Put photos in images/shop/ using the file name below
+  // (a text placeholder shows automatically if the photo is missing).
+  const ITEMS = [
+    { id:'cap',         name:'Cap',                  img:'images/shop/cap.jpg' },
+    { id:'cap-badge',   name:'Cap Badge',            img:'images/shop/cap-badge.jpg' },
+    { id:'blue-tie',    name:'Blue Tie',             img:'images/shop/blue-tie.jpg' },
+    { id:'shirt',       name:'Uniform Shirt',        img:'images/shop/uniform-shirt.jpg' },
+    { id:'pants',       name:'Pants',                img:'images/shop/pants.jpg' },
+    { id:'award',       name:'Award Badges',         img:'images/shop/award-badges.jpg' },
+    { id:'left-badges', name:'Left Badges',          img:'images/shop/left-badges.jpg' },
+    { id:'nametag',     name:'Nametag',              img:'images/shop/nametag.jpg' },
+    { id:'link-badge',  name:'Link Badge',           img:'images/shop/link-badge.jpg' },
+    { id:'lanyard',     name:'Lanyard',              img:'images/shop/lanyard.jpg' },
+    { id:'sash',        name:'Sash',                 img:'images/shop/sash.jpg' },
+    { id:'field-rank',  name:'Field Rank',           img:'images/shop/field-rank.jpg' },
+    { id:'bb-tshirt',   name:'BB T-Shirt',           img:'images/shop/bb-tshirt.jpg' },
+    { id:'socks',       name:'Socks',                img:'images/shop/socks.jpg' },
+    { id:'boots',       name:'Boots',                img:'images/shop/boots.jpg' },
+    { id:'belt',        name:'Web Belt & Buckle',    img:'images/shop/belt.jpg' },
+  ];
+
+  const qty = {}; ITEMS.forEach(i => qty[i.id] = 0);
+  const itemsEl = document.getElementById('items');
+
+  function esc(s){ return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+  ITEMS.forEach(it => {
+    const card = document.createElement('div');
+    card.className = 'item';
+    card.id = 'card-' + it.id;
+    card.innerHTML = `
+      <div class="thumb" data-toggle="${it.id}">
+        <span class="ph">${esc(it.name)}</span>
+        <img src="${it.img}" alt="${esc(it.name)}" loading="lazy">
+        <span class="tick" aria-hidden="true">✓</span>
+      </div>
+      <div class="item-body">
+        <h4>${esc(it.name)}</h4>
+        <div class="qty">
+          <button type="button" data-dec="${it.id}" aria-label="Decrease ${esc(it.name)}">−</button>
+          <input type="number" min="0" max="99" value="0" id="q-${it.id}" aria-label="${esc(it.name)} quantity">
+          <button type="button" data-inc="${it.id}" aria-label="Increase ${esc(it.name)}">+</button>
+        </div>
+      </div>`;
+    const img = card.querySelector('img');
+    img.addEventListener('error', () => img.remove());
+    itemsEl.appendChild(card);
+  });
+
+  function setQty(id, n){
+    n = Math.max(0, Math.min(99, parseInt(n,10) || 0));
+    qty[id] = n;
+    document.getElementById('q-' + id).value = n;
+    document.getElementById('card-' + id).classList.toggle('active', n > 0);
+    updateTotals();
+  }
+  function updateTotals(){
+    let kinds = 0, pieces = 0;
+    for (const id in qty){ if (qty[id] > 0){ kinds++; pieces += qty[id]; } }
+    document.getElementById('totalItems').textContent = kinds;
+    document.getElementById('totalQty').textContent = pieces;
+  }
+
+  itemsEl.addEventListener('click', e => {
+    const t = e.target.closest('[data-toggle],[data-inc],[data-dec]');
+    if (!t) return;
+    if (t.dataset.toggle){ setQty(t.dataset.toggle, qty[t.dataset.toggle] > 0 ? 0 : 1); }
+    else if (t.dataset.inc){ setQty(t.dataset.inc, qty[t.dataset.inc] + 1); }
+    else if (t.dataset.dec){ setQty(t.dataset.dec, qty[t.dataset.dec] - 1); }
+  });
+  itemsEl.addEventListener('change', e => {
+    if (e.target.matches('input[type=number]')) setQty(e.target.id.slice(2), e.target.value);
+  });
+
+  // Pre-select from the shop page link, e.g. order.html?item=cap
+  const pre = new URLSearchParams(location.search).get('item');
+  if (pre && qty.hasOwnProperty(pre)){
+    setQty(pre, 1);
+    setTimeout(() => document.getElementById('card-' + pre).scrollIntoView({behavior:'smooth', block:'center'}), 150);
+  }
+
+  // Review order
+  const form = document.getElementById('orderForm');
+  const errEl = document.getElementById('err');
+  const summaryBox = document.getElementById('summary');
+  const summaryText = document.getElementById('summaryText');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('fname').value.trim();
+    const contact = document.getElementById('fcontact').value.trim();
+    const chosen = ITEMS.filter(i => qty[i.id] > 0);
+    let msg = '';
+    if (!chosen.length) msg = 'Please choose at least one item.';
+    else if (!name) msg = 'Please enter the member\'s name.';
+    else if (!contact) msg = 'Please enter a contact number.';
+    if (msg){ errEl.textContent = msg; errEl.style.display = 'block'; return; }
+    errEl.style.display = 'none';
+
+    const lines = [];
+    lines.push('2ND KUCHING COMPANY — UNIFORM ORDER');
+    lines.push('');
+    lines.push('Name: ' + name);
+    lines.push('Section: ' + document.getElementById('fsection').value);
+    lines.push('Contact: ' + contact);
+    lines.push('');
+    lines.push('Items:');
+    chosen.forEach(i => lines.push('  - ' + i.name + ' x ' + qty[i.id]));
+    const notes = document.getElementById('fnotes').value.trim();
+    if (notes){ lines.push(''); lines.push('Other requirements:'); lines.push(notes); }
+    const text = lines.join('\n');
+
+    summaryText.value = text;
+    summaryBox.style.display = 'block';
+    const wa = document.getElementById('waBtn');
+    if (WHATSAPP_NUMBER){
+      wa.href = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(text);
+      wa.style.display = 'inline-flex';
+    }
+    summaryBox.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('copyBtn');
+    try { await navigator.clipboard.writeText(summaryText.value); }
+    catch (err) { summaryText.select(); document.execCommand('copy'); }
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => btn.textContent = 'Copy order', 1800);
+  });
+  document.getElementById('editBtn').addEventListener('click', () => {
+    summaryBox.style.display = 'none';
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+</script>
+</body>
+</html>
